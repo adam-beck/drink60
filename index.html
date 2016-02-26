@@ -6,18 +6,40 @@
     <title>Drink60</title>
   </head>
   <body>
-    Hopefully this works
 
-    <button id="getSong">Get Song</button>
+    <header>
+      <h1>Drink60</h1>
+    </header>
 
-    <audio id="audio" controls="controls">
-    </audio>
+    <button id="getSong">Start</button>
+
+    <audio id="audio" controls="controls"></audio>
+
+    <div class="current-game">
+      <p>You have made it through <span id="playCount"></span></p>
+    </div>
+
+    <div class="current-song-container">
+      <h2>Current Song</h2>
+      <p>
+        Title: <span id="songTitle"></span>
+      </p>
+      <p>
+        Artist: <span id="songArtist"></span>
+      </p>
+    </div>
 
     <script>
 
       var btn = document.getElementById('getSong');
       var audio = document.getElementById('audio')
-      var songs = [];
+      var songTitleDisplay = document.getElementById('songTitle');
+      var songArtistDispay = document.getElementById('songArtist');
+
+      var playCount = 0;
+      var playCountElement = document.getElementById('playCount');
+
+      var tracks = [];
 
       btn.addEventListener('click', start);
 
@@ -27,30 +49,40 @@
 
         request.onload = function() {
           var data = JSON.parse(request.responseText);
-          songs = songs.concat(data.urls);
+          tracks = tracks.concat(data);
+
           if (cb) {
-            cb(songs);
+            cb(tracks);
           }
         };
 
         request.send();
       }
 
-      function playSong(audioElement, url, timeout) {
+      function updateSongInformation(track) {
+        songTitleDisplay.textContent = track.title;
+        songArtistDispay.textContent = track.artist;
+
+        playCountElement.textContent = playCount === 1 ? '1 song' : playCount + ' songs';
+        playCount = playCount + 1;
+      }
+
+      function playSong(audioElement, track, timeout) {
         setTimeout(function() {
           fetchSongs(function() {
-            audioElement.src = url;
+            updateSongInformation(track);
+            audioElement.src = track.url;
             audioElement.load();
             audioElement.play();
-            playSong(audioElement, songs.shift(), 60 * 1000);
+            playSong(audioElement, tracks.shift(), 60 * 1000);
           });
 
         }, timeout);
       }
 
       function start() {
-        fetchSongs(function(songs) {
-          playSong(audio, songs.shift(), 0);
+        fetchSongs(function(tracks) {
+          playSong(audio, tracks.shift(), 0);
         });
       }
 

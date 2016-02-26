@@ -25,13 +25,11 @@ server.route({
   path: '/getSong',
   handler: (req, resp) => {
     var pythonScript = new PythonShell('app.py');
-    pythonScript.on('message', function(trackUrls) {
+    pythonScript.on('message', track => {
 
-      var urls = trackUrls.split('FOOBAR').map(function(trackUrl) {
-        return trackUrl;
-      });
+      console.log(track);
 
-      return resp({urls: urls}).type('application/json').code(200);
+      return resp(track).type('application/json').code(200);
     });
   }
 });
