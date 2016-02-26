@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Drink60</title>
+  </head>
+  <body>
+    Hopefully this works
+
+    <button id="getSong">Get Song</button>
+
+    <audio id="audio" controls="controls">
+    </audio>
+
+    <script>
+
+      var btn = document.getElementById('getSong');
+      var audio = document.getElementById('audio')
+      var songs = [];
+
+      btn.addEventListener('click', start);
+
+      function fetchSongs(cb) {
+        var request = new XMLHttpRequest();
+        request.open('GET', '/getSong', true);
+
+        request.onload = function() {
+          var data = JSON.parse(request.responseText);
+          songs = songs.concat(data.urls);
+          if (cb) {
+            cb(songs);
+          }
+        };
+
+        request.send();
+      }
+
+      function playSong(audioElement, url, timeout) {
+        setTimeout(function() {
+          fetchSongs(function() {
+            audioElement.src = url;
+            audioElement.load();
+            audioElement.play();
+            playSong(audioElement, songs.shift(), 60 * 1000);
+          });
+
+        }, timeout);
+      }
+
+      function start() {
+        fetchSongs(function(songs) {
+          playSong(audio, songs.shift(), 0);
+        });
+      }
+
+    </script>
+  </body>
+</html>
