@@ -13,7 +13,6 @@
 
     <button id="getSong">Start</button>
 
-    <audio id="audio" controls="controls"></audio>
 
     <div class="current-game">
       <p>You have made it through <span id="playCount"></span></p>
@@ -22,11 +21,16 @@
     <div class="current-song-container">
       <h2>Current Song</h2>
       <p>
-        Title: <span id="songTitle"></span>
+        Title:  <span id="songTitle"></span>
       </p>
       <p>
         Artist: <span id="songArtist"></span>
       </p>
+
+      <div class="audio-controls">
+        <audio id="audio" controls="controls"></audio>
+      </div>
+
     </div>
 
     <script src="/assets/bundle.js"></script>

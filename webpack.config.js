@@ -25,7 +25,13 @@ module.exports = {
         test: /\.css$/,
         include: path.join(__dirname, 'src'),
         loaders: ['style', 'css', 'postcss']
+      },
+      {
+        test: /\.png$/,
+        exclude: /node_modules/,
+        loaders: ['url']
       }
+
     ]
   },
   postcss: function(webpack) {
