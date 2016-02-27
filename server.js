@@ -8,14 +8,25 @@ server.connection({
   port: 3005
 });
 
+
 server.register(require('inert'), err => {
   if (err) throw err;
 
   server.route({
     method: 'GET',
+    path: '/public/{filename*}',
+    handler: {
+      directory: {
+        path: 'public'
+      }
+    }
+  });
+
+  server.route({
+    method: 'GET',
     path: '/',
     handler: (request, reply) => {
-      reply.file('./index.html');
+      reply.file('./public/index.html');
     }
   });
 });
@@ -24,7 +35,7 @@ server.route({
   method: 'GET',
   path: '/getSong',
   handler: (req, resp) => {
-    var pythonScript = new PythonShell('app.py');
+    var pythonScript = new PythonShell('gmusic.py');
     pythonScript.on('message', track => {
 
       console.log(track);
