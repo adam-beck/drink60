@@ -10,6 +10,8 @@ var playCountElement = document.getElementById('playCount');
 
 var tracks = [];
 
+var MAX_COUNT = 60;
+
 btn.addEventListener('click', start);
 
 function fetchSongs(cb) {
@@ -43,7 +45,21 @@ function playSong(audioElement, track, timeout) {
       audioElement.src = track.url;
       audioElement.load();
       audioElement.play();
-      playSong(audioElement, tracks.shift(), 60 * 1000);
+      if (playCount <= MAX_COUNT) {
+        playSong(audioElement, tracks.shift(), 5 * 1000);
+      } else {
+        audioElement.pause();
+        audioElement.src = '';
+
+        var endTrack = {
+          title: 'YOU FINISHED',
+          artist: 'CONGRATULATIONS!'
+        };
+
+        songTitleDisplay.textContent = endTrack.title
+        songArtistDispay.textContent = endTrack.artist;
+
+      }
     });
 
   }, timeout);

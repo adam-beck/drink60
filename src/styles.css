@@ -16,7 +16,7 @@ header {
   margin: 0 auto;
   color: white;
   width: 500px;
-  background-image: url("../public/real_cf.png");
+  background-image: url("./real_cf.png");
   border-radius: 25px;
   padding: 10px;
   font-size: 22px;
